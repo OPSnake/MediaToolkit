@@ -1,7 +1,6 @@
 ﻿namespace MediaToolkit
 {
     using System;
-    using System.Configuration;
     using System.Diagnostics;
     using System.IO;
     using System.IO.Compression;
@@ -10,6 +9,9 @@
 
     using MediaToolkit.Properties;
     using MediaToolkit.Util;
+#if NET
+    using System.Configuration;
+#endif
 
     public class EngineBase : IDisposable
     {
@@ -29,12 +31,15 @@
         /// <summary>   The ffmpeg process. </summary>
         protected Process FFmpegProcess;
 
-
-         protected EngineBase()
-            : this(ConfigurationManager.AppSettings["mediaToolkit.ffmpeg.path"])
-        {
+#if NET
+        protected EngineBase()
+           : this(ConfigurationManager.AppSettings["mediaToolkit.ffmpeg.path"]) {
         }
-
+#else
+         protected EngineBase()
+           : this(null) {
+        }
+#endif
         ///-------------------------------------------------------------------------------------------------
         /// <summary>
         ///     <para> Initializes FFmpeg.exe; Ensuring that there is a copy</para>
@@ -98,8 +103,12 @@
         /// <exception cref="Exception">    Thrown when an exception error condition occurs. </exception>
         private static void UnpackFFmpegExecutable(string path)
         {
-            Stream compressedFFmpegStream = Assembly.GetExecutingAssembly()
-                                                    .GetManifestResourceStream(Resources.FFmpegManifestResourceName);
+#if NETSTANDARD1_6
+            Assembly assembly = typeof(EngineBase).GetTypeInfo().Assembly;
+#else
+            Assembly assembly = Assembly.GetExecutingAssembly();
+#endif
+            Stream compressedFFmpegStream = assembly.GetManifestResourceStream(Resources.FFmpegManifestResourceName);
 
             if (compressedFFmpegStream == null)
             {

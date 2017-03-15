@@ -21,7 +21,7 @@ namespace MediaToolkit.Util
             finally
             {
                 if (fileStream != null)
-                    fileStream.Close();
+                    fileStream.Dispose();
             }
 
             return false;
@@ -49,7 +49,7 @@ namespace MediaToolkit.Util
             finally
             {
                 if (fileStream != null)
-                    fileStream.Close();
+                    fileStream.Dispose();
             }
 
             return false;

@@ -160,7 +160,9 @@
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
+#if NET
                     WindowStyle = ProcessWindowStyle.Hidden
+#endif
                 };
             }
             else //linux case: -nostdin options doesn't exist at least in debian ffmpeg
@@ -174,12 +176,14 @@
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
+#if NET
                     WindowStyle = ProcessWindowStyle.Hidden
+#endif
                 };
             }
         }
         
-        #endregion
+#endregion
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>   Raises the conversion complete event. </summary>
